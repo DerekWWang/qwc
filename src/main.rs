@@ -44,8 +44,16 @@ struct Arguments {
 
 impl Arguments {
     fn new(args: &[String]) -> Result<Arguments, &'static str> {
-        if args.len() != 3 {
+        if args.len() < 2 {
             return Err("Incorrect number of arguments");
+        }
+
+        if args.len() == 2 {
+            return Ok(Arguments {
+                    flag: "d".to_string(),
+                    file_path: args[1].clone(),
+                }
+            )
         } else {
             return Ok(Arguments {
                 flag: args[1].clone(),
@@ -72,5 +80,10 @@ fn main() {
         println!("\t {} {}", file_line_count(&arguments.file_path), arguments.file_path);
     } else if arguments.flag == "-w" {
         println!("\t {} {}", file_word_count(&arguments.file_path), arguments.file_path);
+    } else if arguments.flag == "d" {
+        let fbc = file_length_bytes(&arguments.file_path);
+        let flc = file_line_count(&arguments.file_path);
+        let fwc = file_word_count(&arguments.file_path);
+        println!("\t {} {} {} {}", flc, fwc, fbc, arguments.file_path);
     }
 }
