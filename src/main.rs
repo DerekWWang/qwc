@@ -1,5 +1,5 @@
 use std::fs;
-use std::io::{self, BufRead, BufReader};
+use std::io::{BufRead, BufReader};
 use std::path::Path;
 use std::env;
 
@@ -85,8 +85,6 @@ impl Arguments {
 }
 
 fn main() {
-    println!("Read {} bytes from the file", file_byte_count(&"/Users/derekzhu/Code/Quant/qwc/src/main.rs".to_string()));
-
     let args: Vec<String> = env::args().collect();
     let program = args[0].clone();
     let arguments = Arguments::new(&args).unwrap_or_else(|err| {
