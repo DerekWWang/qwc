@@ -3,7 +3,7 @@ use std::io::{self, BufRead, BufReader};
 use std::path::Path;
 use std::env;
 
-fn file_length_bytes(file_name: &String) -> usize {
+fn file_byte_count(file_name: &String) -> usize {
     let bytes: Vec<u8> = fs::read(file_name).expect("Error Reason");
     bytes.len()
 }
@@ -14,7 +14,6 @@ fn file_line_count(file_name: &String) -> usize {
     let reader = BufReader::new(file);
 
     let mut lc: usize = 0;
-
     for lr in reader.lines() {
         lc += 1;
     }
@@ -64,7 +63,7 @@ impl Arguments {
 }
 
 fn main() {
-    println!("Read {} bytes from the file", file_length_bytes(&"/Users/derekzhu/Code/Quant/qwc/src/main.rs".to_string()));
+    println!("Read {} bytes from the file", file_byte_count(&"/Users/derekzhu/Code/Quant/qwc/src/main.rs".to_string()));
 
     let args: Vec<String> = env::args().collect();
     let program = args[0].clone();
@@ -75,13 +74,13 @@ fn main() {
     });
 
     if arguments.flag == "-c" {
-        println!("\t {} {}", file_length_bytes(&arguments.file_path), arguments.file_path);
+        println!("\t {} {}", file_byte_count(&arguments.file_path), arguments.file_path);
     } else if arguments.flag == "-l" {
         println!("\t {} {}", file_line_count(&arguments.file_path), arguments.file_path);
     } else if arguments.flag == "-w" {
         println!("\t {} {}", file_word_count(&arguments.file_path), arguments.file_path);
     } else if arguments.flag == "d" {
-        let fbc = file_length_bytes(&arguments.file_path);
+        let fbc = file_byte_count(&arguments.file_path);
         let flc = file_line_count(&arguments.file_path);
         let fwc = file_word_count(&arguments.file_path);
         println!("\t {} {} {} {}", flc, fwc, fbc, arguments.file_path);
