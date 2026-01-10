@@ -14,7 +14,7 @@ fn file_line_count(file_name: &String) -> usize {
     let reader = BufReader::new(file);
 
     let mut lc: usize = 0;
-    for lr in reader.lines() {
+    for _lr in reader.lines() {
         lc += 1;
     }
     lc
@@ -34,6 +34,28 @@ fn file_word_count(file_name: &String) -> usize {
     }
 
     wc
+}
+
+fn file_char_count(file_name: &String) -> usize {
+    let path = Path::new(file_name);
+    let file = fs::File::open(path).expect("Couple not open file");
+    let mut reader = BufReader::new(file);
+
+    let mut buf = String::new();
+
+    let mut cc: usize = 0;
+    
+    loop {
+        buf.clear();
+        let n = reader.read_line(&mut buf).expect("Could not read into buffer");
+        if n == 0 {
+            break;
+        }
+
+        cc += buf.chars().count();
+    }
+
+    cc
 }
 
 struct Arguments {
@@ -79,6 +101,8 @@ fn main() {
         println!("\t {} {}", file_line_count(&arguments.file_path), arguments.file_path);
     } else if arguments.flag == "-w" {
         println!("\t {} {}", file_word_count(&arguments.file_path), arguments.file_path);
+    } else if arguments.flag == "-m" {
+        println!("\t {} {}", file_char_count(&arguments.file_path), arguments.file_path);
     } else if arguments.flag == "d" {
         let fbc = file_byte_count(&arguments.file_path);
         let flc = file_line_count(&arguments.file_path);
